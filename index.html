@@ -593,14 +593,14 @@
             const formData = { email: userEmail };
     
             // Envio los datos al backend en formato JSON
-            fetch("http://localhost:3000/backend", {
+            fetch("https://backend-landing.vercel.app/backend", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-            })
-                .then((response) => {
+                "Content-Type": "application/json",
+            },
+               body: JSON.stringify(formData),
+             })
+               .then((response) => {
                     if (response.ok) {
                         // Oculto el mensaje de error
                         document.getElementById("email-error").style.display = "none";
