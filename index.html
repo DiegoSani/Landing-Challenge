@@ -25,11 +25,12 @@
       rel="stylesheet"
       crossorigin="anonymous"
     />
-    <!-- BOOTSTRAP -->
+    <!-- BOOTSTRAP & JQUERY -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- PERFORMANCE -->
     <link
       rel="stylesheet"
@@ -38,7 +39,7 @@
     <link rel="preload" as="style" href="style.css" />
     <link rel="stylesheet" href="style.css" />
     <!-- TITLE -->
-    <title>Layer: Free Landing Page Template from Uisual</title>
+    <title>Landing Page Challenge</title>
   </head>
   <body>
     <header role="banner" class="ui-section-header">
@@ -480,47 +481,48 @@
       </section>
       <section class="ui-section-form">
         <div class="ui-layout-container">
-          <form id="myForm" class="d-flex flex-column align-items-center">
-            <h2>Design Better</h2>
-            <p class="ui-section-testimonial--quote ui-text-intro">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Consequatur neque quia incidunt reiciendis eveniet aliquid nobis
-              dolorem tempore minima accusantium doloremque iure, odio vel
-              dolorum facere voluptatibus dolores quasi laborum!
-            </p>
-            <div class="ui-component-cta">
-              <div class="input-group mb-3 input-group-no-padding">
-                <input
-                  type="email"
-                  class="form-control"
-                  id="email"
-                  name="email"
-                  placeholder="Email"
-                  required
-                  aria-label="Recipient's username"
-                  aria-describedby="basic-addon2"
-                />
-                <div class="input-group-append">
-                  <button
-                    href="#"
-                    class="ui-component-button ui-component-button-primary"
-                    id="submit-btn"
-                    role="link"
-                    aria-label="#"
-                  >
-                    Join Waitlist
-                  </button>
+            <form id="myForm" class="d-flex flex-column align-items-center">
+                <h2>Design Better</h2>
+                <p class="ui-section-testimonial--quote ui-text-intro">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Consequatur neque quia incidunt reiciendis eveniet aliquid nobis
+                    dolorem tempore minima accusantium doloremque iure, odio vel
+                    dolorum facere voluptatibus dolores quasi laborum!
+                </p>
+                <div class="ui-component-cta">
+                    <div class="input-group mb-3 input-group-no-padding">
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            placeholder="Email"
+                            required
+                            aria-label="Recipient's username"
+                            aria-describedby="basic-addon2"
+                        />
+                        <div class="input-group-append">
+                            <button
+                                href="#"
+                                class="ui-component-button ui-component-button-primary"
+                                id="submit-btn"
+                                role="link"
+                                aria-label="#"
+                            >
+                                Join Waitlist
+                            </button>
+                        </div>
+                    </div>
+                    <p class="ui-text-note" id="email-error" style="color: red; display: none;">
+                        <small>Ingrese un correo electrónico válido</small>
+                    </p>
                 </div>
-              </div>
-              <p class="ui-text-note">
-                <small>Available on Mac, Windows, and Linux.</small>
-              </p>
-            </div>
-          </form>
+            </form>
         </div>
-      </section>
+    </section>
+      <!-- SCRIPTS -->
       <script>
-        // Obtengo el elemento HTML donde se mostrará la fecha actual
+        //Obtengo el elemento HTML donde se mostrará la fecha actual
         const currentDateElement = document.getElementById("current-date");
 
         // Fecha actual
@@ -571,46 +573,50 @@
         // Asigno el texto formateado al elemento HTML donde se mostrará la fecha
         currentDateElement.textContent = formattedDate;
       </script>
+
       <!-- ENVIO DE DATOS DEL FORM AL BACK EN NODEJS -->
       <script>
-        document
-          .getElementById("submit-btn")
-          .addEventListener("click", function (event) {
+        document.getElementById("submit-btn").addEventListener("click", function (event) {
             event.preventDefault();
             // Obtengo el correo electrónico ingresado por el usuario
             const userEmail = document.getElementById("email").value;
-
+    
+            // Valido el correo electrónico
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(userEmail)) {
+                // Muestro mensaje de error si no es una direccion valida
+                document.getElementById("email-error").style.display = "block";
+                return;
+            }
+    
             // Creo un objeto con los datos del formulario
             const formData = { email: userEmail };
-
-            // Envio los datos al backend en formato JSON. TODO: Poner los datos del back
-            fetch("/ruta-al-backend", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(formData),
+    
+            // Envio los datos al backend en formato JSON
+            fetch("http://localhost:3000/backend", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
             })
-              .then((response) => {
-                if (response.ok) {
-                  console.log(
-                    "Datos del formulario enviados correctamente al backend"
-                  );
-                } else {
-                  console.error(
-                    "Error al enviar los datos del formulario al backend"
-                  );
-                }
-              })
-              .catch((error) => {
-                console.error(
-                  "Error al enviar los datos del formulario:",
-                  error
-                );
-              });
-          });
-      </script>
+                .then((response) => {
+                    if (response.ok) {
+                        // Oculto el mensaje de error
+                        document.getElementById("email-error").style.display = "none";
+                        // Muestro el modal de éxito
+                        $("#successModal").modal("show");
+                    } else {
+                        console.error("Error al enviar los datos del formulario al backend");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error al enviar los datos del formulario:", error);
+                });
+        });
+    </script>    
     </main>
+    <!-- FOOTER -->
     <footer role="contentinfo" class="ui-section-footer">
       <div class="ui-layout-container">
         <div class="ui-section-footer__layout ui-layout-flex">
@@ -678,5 +684,38 @@
         </div>
       </div>
     </footer>
+    <!-- MODAL -->
+    <div
+      class="modal fade"
+      id="successModal"
+      tabindex="-1"
+      aria-labelledby="successModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="successModalLabel">
+              ¡Email enviado correctamente!
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">Tu correo electrónico se ha enviado correctamente.</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="ui-component-button ui-component-button-primary btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              <span id="btn-text">Cerrar</span>
+            </button>
+          </div>          
+      </div>
+    </div>
   </body>
 </html>

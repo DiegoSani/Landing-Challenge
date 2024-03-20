@@ -729,6 +729,20 @@ input[name="toggle"] {
   margin-right: auto;
 }
 
+/* MODAL */
+#btn-text {
+  color: var(--ui-color-background-secondary);
+  transition: color 0.2s ease-in-out;
+  border-radius: 20px;
+  padding: 5px 15px;
+  display: flex;
+}
+
+#btn-text:hover {
+  color: #0d6efd;
+}
+
+
 /*--------------------------------------------------------------
   8.0 MEDIA
   --------------------------------------------------------------*/
